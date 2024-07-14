@@ -9,7 +9,7 @@
 }:
 
 buildNpmPackage rec {
-  pname = "siyuan-unlock";
+  pname = "siyuan";
   version = "103.0.17";
 
   src = fetchFromGitHub {
@@ -36,6 +36,7 @@ buildNpmPackage rec {
     # this fixes a problem where it was copying files from the store and keeping their permissions
     # hopefully this doesn't break other functionality
     modPostBuild = ''
+    export GOPROXY=https://goproxy.io
       chmod +w vendor/github.com/88250/gulu
       substituteInPlace vendor/github.com/88250/gulu/file.go \
           --replace-fail "os.Chmod(dest, sourceinfo.Mode())" "os.Chmod(dest, 0644)"
@@ -45,6 +46,7 @@ buildNpmPackage rec {
   sourceRoot = "${src.name}/app";
 
   postPatch = ''
+    export GOPROXY=https://goproxy.io
     ln -s ${./package-lock.json} package-lock.json
     # for some reason the default page is broken, use the redirection link automatically
     substituteInPlace electron/main.js \
@@ -58,6 +60,7 @@ buildNpmPackage rec {
   npmBuildScript = "build:desktop";
 
   postBuild = ''
+    export GOPROXY=https://goproxy.io
     substituteInPlace electron-builder-linux.yml \
         --replace-fail '- target: "AppImage"' "" \
         --replace-fail '- target: "tar.gz"' '- target: "dir"'
@@ -66,7 +69,6 @@ buildNpmPackage rec {
     sed -e 1i'electronDist: ${electron}/libexec/electron' \
         -e 1i'electronVersion: ${electron.version}' \
         -i electron-builder-linux.yml
-
     npm run dist-linux
   '';
 
