@@ -9,12 +9,12 @@
 }:
 
 buildNpmPackage rec {
-  pname = "siyuan";
-  version = "3.0.11";
+  pname = "siyuan-unlock";
+  version = "103.0.17";
 
   src = fetchFromGitHub {
-    owner = "siyuan-note";
-    repo = "siyuan";
+    owner = "appdev";
+    repo = "siyuan-unlock";
     rev = "v${version}";
     hash = "sha256-s82g5os944us85V2TBnm+HNd37vVzNjaOJYrbBrgLSI=";
   };
@@ -94,7 +94,7 @@ buildNpmPackage rec {
     homepage = "https://b3log.org/siyuan/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "siyuan";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [ coxychen ];
     platforms = lib.platforms.linux;
   };
 }
